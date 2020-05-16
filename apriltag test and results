@@ -1,0 +1,20 @@
+import apriltag
+import cv2
+
+img = cv2.imread('apriltags104.jpg',cv2.IMREAD_GRAYSCALE)
+detector = apriltag.Detector()
+result = detector.detect(img)
+print(result)
+
+
+[Detection(tag_family=b'tag36h11', tag_id=0, hamming=0, goodness=0.0, decision_margin=46.97037887573242, homography=array([[ 7.37376529e-01, -4.44465654e-02,  2.04733486e+00],
+       [ 2.85089023e-02,  6.71153300e-01,  1.53857417e+00],
+       [ 3.58186381e-05, -6.04843679e-05,  4.08122919e-03]]), center=array([501.64662734, 376.98793647]), corners=array([[329.86837769, 204.31890869],
+       [677.23187256, 214.46388245],
+       [675.51385498, 551.7567749 ],
+       [317.57470703, 547.36737061]])), Detection(tag_family=b'tag36h11', tag_id=1, hamming=0, goodness=0.0, decision_margin=50.0180549621582, homography=array([[ 7.24122637e-01, -2.76150552e-02,  4.12447360e+00],
+       [ 1.57727301e-02,  6.92056226e-01,  1.61562922e+00],
+       [ 1.44959028e-05, -3.14575107e-05,  4.18604511e-03]]), center=array([985.29124607, 385.95599806]), corners=array([[ 815.59851074,  215.98829651],
+       [1152.22424316,  221.962677  ],
+       [1156.36474609,  557.30670166],
+       [ 814.65246582,  553.58984375]]))]
