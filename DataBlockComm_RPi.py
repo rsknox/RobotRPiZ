@@ -9,7 +9,9 @@ address = 0x03
 while True:
     try:
         data = bus.read_i2c_block_data(address, 0);
-        print (data)
+        print(chr(data[0]))
+        print(data)
+#        print (data.encode('ASCII'))
     except:
         print ("Error getting data\n")
         continue
