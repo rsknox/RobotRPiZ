@@ -67,7 +67,7 @@ void receiveEvent(int howMany) {
     Serial.print(data);
   }
   
-//  toggleLED();
+  toggleLED();
   echonum = numOfBytes-1;   // added
 
 }
