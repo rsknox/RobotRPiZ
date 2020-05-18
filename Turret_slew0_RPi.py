@@ -1,50 +1,52 @@
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-#  Raspberry Pi Master for Arduino Slave
-#  i2c_master_pi.py
-#  Connects to Arduino via I2C
+# http://helloraspberrypi.blogspot.com/2015/01/raspberry-pi-arduino-i2c-communication.html
 
-#  DroneBot Workshop 2019
-#  https://dronebotworkshop.com
+#have to run 'sudo apt-get install python-smbus'
+#in Terminal to install smbus
+import smbus
+import time
+import os
 
-from smbus import SMBus
+# display system info
+print (os.uname())
 
-addr = 0x8  # bus address
-bus = SMBus(1)  # indicates /dev/ic2-1
+bus = smbus.SMBus(1)
 
-numb = 1
+# I2C address of Arduino Slave
+i2c_address = 0x07
+i2c_cmd_write = 0x01
+i2c_cmd_read = 0x02
 
-print("Enter 1 for ON or 0 for OFF")
-while numb == 1:
+def ConvertStringToBytes(src):
+    converted = []
+    for b in src:
+        converted.append(ord(b))
+    return converted
 
-    ledstate = input(">>>>   ")
+# send welcome message at start-up
+bytesToSend = ConvertStringToBytes("Hello Nano")
+bus.write_i2c_block_data(i2c_address, i2c_cmd_write, bytesToSend)
 
-    if ledstate == "1":
-        bus.write_byte(addr, 0x1)  # switch it on
-    elif ledstate == "0":
-        bus.write_byte(addr, 0x0)  # switch it on
-    else:
-        numb = 0
+# loop to send message
+exit = False
+while not exit:
+    r = input('Enter something, "q" to quit"')
+    print(r)
+    
+    bytesToSend = ConvertStringToBytes(r)
+    bus.write_i2c_block_data(i2c_address, i2c_cmd_write, bytesToSend)
+    
+    # delay 0.1 second
+    # with delay will cause error of:
+    # IOError: [Error 5] Input/output error
+    time.sleep(0.1)
+    
+    data = ""
+    numOfByte = bus.read_byte(i2c_address)
+    print (numOfByte)
+    
+    for i in range(0, numOfByte):
+        data += chr(bus.read_byte(i2c_address));
+    print (data)
+    
+    if r=='q':
+        exit=True
