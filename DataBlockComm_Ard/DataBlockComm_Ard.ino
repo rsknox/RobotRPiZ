@@ -1,6 +1,9 @@
 /*
  * from http://bradsduino.blogspot.com/2013/03/sending-data-from-arduino-to-raspberry.html
  * Collects data from sensors attached to Ardunio and sends to RPi
+ * 20200518: I forced integer values into a byte array and did a Wire.write of that array, and it did get transmitted to the RPi
+ *    I think if I want to send character data, I have to do an 'ord' coversion, or maybe char(x)
+ * 
  * 
  */
 
@@ -9,6 +12,10 @@
 //#include <OneWire.h>
 
 const int DEV_CNT = 4, I2C_ADDR = 0x03;
+
+
+byte datab[12] = {40,50,60,70,80,90,100,110,120,130,140,150};
+char datac[12] = {'a', 'r', 'd', 'u', 'i', 'n', 'o', ' ', 'N','A', 'N', 'O'};
 
 //OneWire ds(10);  // 1wire bus on pin 10
 int j = 0;
@@ -80,5 +87,7 @@ void requestEvent() // Handle i2c requests
     }
   }
   // Send data over i2c connection
-  Wire.write(buffer, DEV_CNT*4);
+//  Wire.write(buffer, DEV_CNT*4);
+//  Wire.write(datab, 12); 
+  Wire.write(datac, 12);  
 }
