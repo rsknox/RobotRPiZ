@@ -1,11 +1,20 @@
 import apriltag
 import cv2
 import math
-
-img = cv2.imread('apriltags104.jpg',cv2.IMREAD_GRAYSCALE)
+import time
+photo = 'apriltags600.jpg'
+print("IMAGE: ", photo)
+t0 = time.time()
+print("start image read: ", t0)
+img = cv2.imread(photo,cv2.IMREAD_GRAYSCALE)
+print("image size: ",img.shape)
 # five-meters105.jpg contains no targets
 #img = cv2.imread('five-meters104.jpg',cv2.IMREAD_GRAYSCALE)
+t1 = time.time()
+
 detector = apriltag.Detector()
+t2 = time.time()
+
 result = detector.detect(img)
 if result == []:
     print ("Empty arrary - no targets found")
@@ -33,3 +42,8 @@ else:
     d = math.sqrt(d)
     print("dist = ", d)
 pass
+t3 = time.time()
+print("start image read: ", t0)
+print("start image detect: ", t1, "  elapsed time: ", (t1-t0))
+print("start result: ", t2, "  elapsed time: ", (t2-t1))
+print("complete: ", t3, "  elapsed time: ", (t3-t2))

@@ -2,11 +2,12 @@ from picamera import PiCamera
 from time import sleep
 
 camera = PiCamera()
-
+camera.resolution = (2592, 1944)
 camera.start_preview()
+
 sleep(5)
 for i in range(5):
-    j = i+100
+    j = i+600
     sleep(3)
     camera.capture('apriltags%s.jpg' %j)
 
