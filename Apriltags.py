@@ -2,7 +2,7 @@ import apriltag
 import cv2
 import math
 import time
-photo = 'apriltags600.jpg'
+photo = 'apriltags900.jpg'
 print("IMAGE: ", photo)
 t0 = time.time()
 print("start image read: ", t0)
