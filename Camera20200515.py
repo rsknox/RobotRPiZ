@@ -7,7 +7,7 @@ camera.start_preview()
 
 sleep(5)
 for i in range(5):
-    j = i+900
+    j = i+1000
     sleep(3)
     camera.capture('apriltags%s.jpg' %j)
 
