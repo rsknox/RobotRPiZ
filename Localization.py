@@ -11,8 +11,10 @@ import math
 import time
 
 # insert parameters and constants
-xcpx = 0
-ycpx = 0
+xcpx = 0  # x(px) center of robot tag
+ycpx = 0  # y(px) center of robot tag
+ytlpx = 0  # y coor of top left px of robot tag
+yllpx = 0  # y coor of lower left px of robot tag
 
 def extract_center(result, i):
     # result (input): apriltag detection list/array
@@ -21,8 +23,17 @@ def extract_center(result, i):
     # ycpx (output): y center coord (in px) of tag
     xcpx = result[i].center[0]
     ycpx = result[i].center[1]
-    print("from def ", xcpx, "  ", ycpx)
+#    print("from def ", xcpx, "  ", ycpx)
     return xcpx, ycpx
+
+def extract_corner(result, i):
+    # result (input): apriltag detection list/array
+    # i (input): the ith detected tag
+    # ytlpx (output): y-coord (in px) of top left corner of tag
+    # yllpx (output): y-coord (in px) of lower left corner of tag
+    ytlpx = result[i].corners[0,1]
+    yllpx = result[i].corners[3,1]
+    return ytlpx, yllpx
 
 # insert code to capture an image every second
 photo = 'apriltags1004.jpg'
@@ -44,11 +55,18 @@ else:
     for i in range(len(result)):
         # look for targets on robot(s) as of this writing apriltag #499
         if result[i].tag_id == 5:
-            # call def to extract center x,y pixels (def extract_center)
-#            extract_center(result, i, xcpx, ycpx)
+            # call def to extract center x,y pixels
             xcpx, ycpx = extract_center(result, i)
-            print("tag id= ", i, "  target center: ", xcpx, "  ", ycpx)
-            # call def to extract top left and lower left corner x,y pixels (def extract_corner)
+#            print("tag id= ", i, "  target center: ", xcpx, "  ", ycpx)
+           
+            # call def to extract top left and lower left corner y pixels
+            # only need the y-coord as calculating the height of the tag
+            ytlpx, yllpx = extract_corner(result, i)
+            print("left corners: ", ytlpx, "  ", yllpx)
+            obj_hgt = int(yllpx - ytlpx)
+            print("robot target object height: ", obj_hgt)
+            
+            
             # call def to calculate range to robot (def calc_range)
             # call def to estimate robot azimuth angle (def calc_az_angle)
             # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
