@@ -35,6 +35,17 @@ def extract_corner(result, i):
     yllpx = result[i].corners[3,1]
     return ytlpx, yllpx
 
+def calc_range(obj_hgt):
+    # set up constants:
+    focal_len = 3.6  # camera focal length in mm
+    real_hgt = 43  # robot target height in mm
+    image_hgt = 1024  # image height in px
+    sensor_hgt = 2.74  # sensor height in mm
+    # obj_hgt (input) in px
+    # r_range is output in mm
+    r_range = (focal_len * real_hgt * image_hgt)/(obj_hgt * sensor_hgt)
+    return r_range
+
 # insert code to capture an image every second
 photo = 'apriltags1004.jpg'
 #print("IMAGE: ", photo)
@@ -65,9 +76,10 @@ else:
             print("left corners: ", ytlpx, "  ", yllpx)
             obj_hgt = int(yllpx - ytlpx)
             print("robot target object height: ", obj_hgt)
-            
-            
+                        
             # call def to calculate range to robot (def calc_range)
+            r_range = calc_range(obj_hgt)
+            print("Robot range: ", r_range)
             # call def to estimate robot azimuth angle (def calc_az_angle)
             # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
         else:
