@@ -87,20 +87,28 @@ result = detector.detect(img)
 if result == []:
     print ("Empty arrary - no targets found")
 else:
+    
     for i in range(len(result)):
         # look for targets on robot(s) as of this writing apriltag #499
 #        if result[i].tag_id == 5:
             # call def to extract center x,y pixels
         xcpx, ycpx = extract_center(result, i)
         print("index= ", i, " tag id= ", result[i].tag_id, "  target center: ", xcpx, "  ", ycpx, '\n')
-        f_subi_list = [0,0,0,0,0,0]
-        f_subi_list[0] =result[i].tag_id
-        f_subi_list[1] = xcpx
-        f_subi_list[2] = ycpx
-        f_subi_list[3] = 4000
-        f_subi_list[4] = 1500
-        f_subi_list[5] = -10
-        print('\n',"f_subi_list ", f_subi_list, '\n')
+        
+        for j in range(len(targets)-1):
+            print('\n', "i= ",i," tag nr: ", result[i].tag_id, " j= :",j, " targets[j][0]= ",targets[j][0])
+            if (int(result[i].tag_id) == int(targets[j][0])):
+                print('\n', "insert center coords")
+                targets[j][6] = int(xcpx)
+                targets[j][7] = int(ycpx)
+#         f_subi_list = [0,0,0,0,0,0]
+#         f_subi_list[0] =result[i].tag_id
+#         f_subi_list[1] = xcpx
+#         f_subi_list[2] = ycpx
+#         f_subi_list[3] = 4000
+#         f_subi_list[4] = 1500
+#         f_subi_list[5] = -10
+#         print('\n',"f_subi_list ", f_subi_list, '\n')
 #         fid_list.append(result[i].tag_id)
 #         fid_list.append(xcpx)
 #         fid_list.append(ycpx)
@@ -108,17 +116,17 @@ else:
 #         fid_list.append(1500)
 #         fid_list.append(-10 )       
         
-        fid_list.append(f_subi_list)
-    print('\n',"fid_list ", fid_list,'\n')
-    print('\n', "length of fid_list ", len(fid_list), " len of nested list ", len(fid_list[1]))
-    print('\n', fid_list[0][5])
+#         fid_list.append(f_subi_list)
+    print('\n',"targets ", targets,'\n')
+#     print('\n', "length of fid_list ", len(fid_list), " len of nested list ", len(fid_list[1]))
+#     print('\n', fid_list[0][5])
 #         print('\n', fid_list[1])
 #         print('\n', fid_list[2])
         #force degree offset values to test sort
-    fid_list[1][5] = 10
-    fid_list[2][5] = 0
-    print('\n',"fid_list with forced values for degrees ", fid_list,'\n')
-    print('\n', "sorted list ", sort_fid_list(fid_list))
+#     fid_list[1][5] = 10
+#     fid_list[2][5] = 0
+#     print('\n',"fid_list with forced values for degrees ", fid_list,'\n')
+#     print('\n', "sorted list ", sort_fid_list(fid_list))
         # = = = =
         # add code to read a csv file with measured pararmeters for fiducial
         # targets
