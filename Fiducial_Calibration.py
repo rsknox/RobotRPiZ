@@ -9,13 +9,20 @@ import apriltag
 import cv2
 import math
 import time
+import csv
 
-# insert parameters and constants
+# Parameters and constants
+# Image parameters
 xcpx = 0  # x(px) center of fiducial tag
 ycpx = 0  # y(px) center of fiducial tag
 ytlpx = 0  # y coor of top left px of robot tag
 yllpx = 0  # y coor of lower left px of robot tag
 fid_list = []
+
+# CSV file parameters
+filename = "gndTrth.csv"
+titles = []
+targets = []
 
 def extract_center(result, i):
     # result (input): apriltag detection list/array
@@ -50,6 +57,18 @@ def calc_range(obj_hgt):
 def sort_fid_list(fid_list):
     # supposedly this will sort on the offset degrees value
     return(sorted(fid_list, key = lambda x: x[5]))
+
+# read ground truth file with fiducial target parameters
+with open(filename, 'r') as csvfile:
+    csvreader = csv.reader(csvfile)
+    titles = next(csvreader)
+    
+    for target in csvreader:
+        targets.append(target)
+        
+print('\n', "len of csv file: ", len(targets))
+print('\n', targets)
+print('\n', "tag 1 measured dist: ", targets[2][4])
 
 # insert code to capture an image every second
 photo = 'apriltags1004.jpg'
