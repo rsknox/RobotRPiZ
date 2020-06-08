@@ -16,7 +16,6 @@ ycpx = 0  # y(px) center of fiducial tag
 ytlpx = 0  # y coor of top left px of robot tag
 yllpx = 0  # y coor of lower left px of robot tag
 fid_list = []
-f_subi_list = [0,0,0,0,0,0]
 
 def extract_center(result, i):
     # result (input): apriltag detection list/array
@@ -48,6 +47,10 @@ def calc_range(obj_hgt):
     r_range = (focal_len * real_hgt * image_hgt)/(obj_hgt * sensor_hgt)
     return r_range
 
+def sort_fid_list(fid_list):
+    # supposedly this will sort on the offset degrees value
+    return(sorted(fid_list, key = lambda x: x[5]))
+
 # insert code to capture an image every second
 photo = 'apriltags1004.jpg'
 #print("IMAGE: ", photo)
@@ -78,7 +81,7 @@ else:
         f_subi_list[3] = 4000
         f_subi_list[4] = 1500
         f_subi_list[5] = -10
-        print('\n',"f_sibi_list ", f_subi_list, '\n')
+        print('\n',"f_subi_list ", f_subi_list, '\n')
 #         fid_list.append(result[i].tag_id)
 #         fid_list.append(xcpx)
 #         fid_list.append(ycpx)
@@ -86,8 +89,21 @@ else:
 #         fid_list.append(1500)
 #         fid_list.append(-10 )       
         
-        fid_list.insert(0,f_subi_list)
-        print('\n',"fid_list ", fid_list,'\n')
+        fid_list.append(f_subi_list)
+    print('\n',"fid_list ", fid_list,'\n')
+    print('\n', "length of fid_list ", len(fid_list), " len of nested list ", len(fid_list[1]))
+    print('\n', fid_list[0][5])
+#         print('\n', fid_list[1])
+#         print('\n', fid_list[2])
+        #force degree offset values to test sort
+    fid_list[1][5] = 10
+    fid_list[2][5] = 0
+    print('\n',"fid_list with forced values for degrees ", fid_list,'\n')
+    print('\n', "sorted list ", sort_fid_list(fid_list))
+        # = = = =
+        # add code to read a csv file with measured pararmeters for fiducial
+        # targets
+        # = = = = 
             # call def to extract top left and lower left corner y pixels
             # only need the y-coord as calculating the height of the tag
 #             ytlpx, yllpx = extract_corner(result, i)
