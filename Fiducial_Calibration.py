@@ -10,6 +10,12 @@ import cv2
 import math
 import time
 import csv
+import glob
+import os
+
+list_files = glob.glob('*.jpg')
+latest_file = max(list_files, key=os.path.getctime)
+print ("newest image file: ", latest_file)
 
 # Parameters and constants
 # Image parameters
