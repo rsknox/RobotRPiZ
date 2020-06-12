@@ -4,6 +4,7 @@ import datetime
 import sys
 import threading
 import time
+import schedule
 
 def i_capture():
     file_name = "/home/pi/RPi-Ardunio/apriltags" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.jpg")
@@ -17,9 +18,17 @@ camera = PiCamera()
 camera.resolution = (1280, 1024)
 camera.start_preview()
 
+schedule.every(.9).seconds.do(i_capture)
 
+sleep(2)  # give camera time to stablize
+now = int(round(time.time() * 1000))
+ter = now + 10000
+while now < ter:
+    schedule.run_pending()
+    now = int(round(time.time() * 1000))
+#    print('\n', 'now: ', now)
+    
 
-sleep(2)
 # file_name = datetime.datetime.now().strftime("%Y%m%d-%H%M%S.jpg")
 # print (file_name)
 # file_name = "/home/pi/RPi-Ardunio/apriltags" + file_name
@@ -27,17 +36,17 @@ sleep(2)
 # #camera.capture('/home/pi/RPi-Ardunio/apriltags%s.jpg' %j)
 # camera.capture(file_name)
 
-msec = int(round(time.time() * 1000))
-print('\n', 'time now: ', msec)
-next_i = msec + 1000
-print('\n', 'next image: ', next_i)
-for i in range(10):
-    sleep(.5)
-    now = int(round(time.time() * 1000))
-    if now >= next_i:
-        i_capture()
-        print('\n', 'now = ', now)
-        next_i = now +1000
+# msec = int(round(time.time() * 1000))
+# print('\n', 'time now: ', msec)
+# next_i = msec + 1000
+# print('\n', 'next image: ', next_i)
+# for i in range(10):
+#     sleep(.5)
+#     now = int(round(time.time() * 1000))
+#     if now >= next_i:
+#         i_capture()
+#         print('\n', 'now = ', now)
+#         next_i = now +1000
         
 
 # for i in range(5):
