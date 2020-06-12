@@ -9,6 +9,8 @@ import apriltag
 import cv2
 import math
 import time
+import glob
+import os
 
 # insert parameters and constants
 xcpx = 0  # x(px) center of robot tag
@@ -47,11 +49,19 @@ def calc_range(obj_hgt):
     return r_range
 
 # insert code to capture an image every second
+
+
+# after capturing image and writing to file, this code picks up most recent file
+list_files = glob.glob('*.jpg')
+latest_file = max(list_files, key=os.path.getctime)
+print ("newest image file: ", latest_file)
+
 photo = 'apriltags1004.jpg'
 #print("IMAGE: ", photo)
 #t0 = time.time()
 #print("start image read: ", t0)
 img = cv2.imread(photo,cv2.IMREAD_GRAYSCALE)
+img = cv2.imread(latest_file,cv2.IMREAD_GRAYSCALE)
 #print("image size: ",img.shape)
 
 #t1 = time.time()
