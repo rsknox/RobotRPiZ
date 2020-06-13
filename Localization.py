@@ -11,6 +11,8 @@ import math
 import time
 import glob
 import os
+import logging
+logging.basicConfig(filename='logLocal.log', level=logging.INFO, format='%(asctime)s %(message)s')
 
 # insert parameters and constants
 xcpx = 0  # x(px) center of robot tag
@@ -55,11 +57,13 @@ def calc_range(obj_hgt):
 list_files = glob.glob('*.jpg')
 latest_file = max(list_files, key=os.path.getctime)
 print ("newest image file: ", latest_file)
+logging.info('Newest image file: {a}'.format (a=latest_file))
 
 photo = 'apriltags1004.jpg'
 #print("IMAGE: ", photo)
-#t0 = time.time()
+t0 = time.time()
 #print("start image read: ", t0)
+logging.info('Start image read: {a}'.format (a=t0))
 img = cv2.imread(photo,cv2.IMREAD_GRAYSCALE)
 img = cv2.imread(latest_file,cv2.IMREAD_GRAYSCALE)
 #print("image size: ",img.shape)
@@ -72,6 +76,7 @@ detector = apriltag.Detector()
 result = detector.detect(img)
 if result == []:
     print ("Empty arrary - no targets found")
+    logging.info('Empty array')
 else:
     for i in range(len(result)):
         # look for targets on robot(s) as of this writing apriltag #499
@@ -86,6 +91,7 @@ else:
             print("left corners: ", ytlpx, "  ", yllpx)
             obj_hgt = int(yllpx - ytlpx)
             print("robot target object height: ", obj_hgt)
+            logging.info('Robot target object height: {a}'.format (a=obj_hgt))
                         
             # call def to calculate range to robot (def calc_range)
             r_range = calc_range(obj_hgt)

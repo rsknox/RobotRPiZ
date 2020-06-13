@@ -5,6 +5,10 @@ import sys
 import threading
 import time
 import schedule
+import logging
+logging.basicConfig(filename='logCamera.log', level=logging.INFO, format='%(asctime)s %(message)s')
+
+
 
 def i_capture():
     file_name = "/home/pi/RPi-Ardunio/apriltags" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.jpg")
@@ -12,13 +16,14 @@ def i_capture():
 #camera.capture('/home/pi/RPi-Ardunio/apriltags%s.jpg' %j)
     camera.capture(file_name)
     print('\n', file_name)
+    logging.info('File name: {a}'.format (a=file_name))
     
-
+logging.info('Start')
 camera = PiCamera()
 camera.resolution = (1280, 1024)
 camera.start_preview()
 
-schedule.every(.9).seconds.do(i_capture)
+schedule.every(1.0).seconds.do(i_capture)
 
 sleep(2)  # give camera time to stablize
 now = int(round(time.time() * 1000))
@@ -27,6 +32,7 @@ while now < ter:
     schedule.run_pending()
     now = int(round(time.time() * 1000))
 #    print('\n', 'now: ', now)
+    #logging.info('now: {a}'.format (a=now))
     
 
 # file_name = datetime.datetime.now().strftime("%Y%m%d-%H%M%S.jpg")
