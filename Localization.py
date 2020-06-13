@@ -11,9 +11,17 @@ import math
 import time
 import glob
 import os
+import sys
+import signal
 import logging
+
 logging.basicConfig(filename='logLocal.log', level=logging.INFO, format='%(asctime)s %(message)s')
 
+def signal_handler(sig, frame):
+    print('ctrl-c detected')
+    logging.info('ctrl-c detected')
+    sys.exit(0)
+    
 # insert parameters and constants
 xcpx = 0  # x(px) center of robot tag
 ycpx = 0  # y(px) center of robot tag
@@ -51,7 +59,7 @@ def calc_range(obj_hgt):
     return r_range
 
 # insert code to capture an image every second
-
+signal.signal(signal.SIGINT, signal_handler)
 
 # after capturing image and writing to file, this code picks up most recent file
 list_files = glob.glob('*.jpg')
