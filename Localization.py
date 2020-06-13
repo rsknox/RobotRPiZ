@@ -17,6 +17,7 @@ import sys
 import signal
 import logging
 import schedule
+import csv
 
 
 
@@ -66,6 +67,7 @@ def calc_range(obj_hgt):
    Initialization and Setup
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 """
+
 logging.basicConfig(filename='log_Localization.log', level=logging.INFO, format='%(asctime)s %(message)s')
 signal.signal(signal.SIGINT, signal_handler)
 schedule.every(1.0).seconds.do(i_capture)
@@ -74,6 +76,10 @@ schedule.every(1.0).seconds.do(i_capture)
 
 camera = PiCamera()
 camera.resolution = (1280, 1024)
+# CSV file parameters
+gnd_t = "gndTrth.csv"
+titles = []
+targets = []
 
 xcpx = 0  # x(px) center of robot tag
 ycpx = 0  # y(px) center of robot tag
@@ -92,6 +98,17 @@ logging.info('Newest image file: {a}'.format (a=latest_file))
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 """
 logging.info('Calibration start')
+# read ground truth file with fiducial target parameters
+with open(gnd_t, 'r') as csvfile:
+    csvreader = csv.reader(csvfile)
+    titles = next(csvreader)
+    
+    for target in csvreader:
+        targets.append(target)
+print('\n', "len of csv file: ", len(targets))
+print('\n', targets)
+print('\n', "tag 1 measured dist: ", targets[2][4])
+
 camera.start_preview(fullscreen=False, window=(100,100,512,384))
 sleep(2)  # give camera time to stablize
 i_capture('calibration')
@@ -99,6 +116,38 @@ list_files = glob.glob('/home/pi/RPi-Ardunio/*.jpg')
 cal_image = max(list_files, key=os.path.getctime)
 print ("calibration image file: ", cal_image)
 logging.info('Calibration image file: {a}'.format (a=cal_image))
+img = cv2.imread(cal_image,cv2.IMREAD_GRAYSCALE)
+
+detector = apriltag.Detector()
+
+result = detector.detect(img)
+if result == []:
+    print ("Empty arrary - no targets found")
+    logging.info('Empty array')
+else:
+    for i in range(len(result)):
+        # look for targets on robot(s) as of this writing apriltag #499
+        if result[i].tag_id != 499:
+            # call def to extract center x,y pixels
+            xcpx, ycpx = extract_center(result, i)
+#            print("tag id= ", i, "  target center: ", xcpx, "  ", ycpx)
+           
+            # call def to extract top left and lower left corner y pixels
+            # only need the y-coord as calculating the height of the tag
+            ytlpx, yllpx = extract_corner(result, i)
+            print("left corners: ", ytlpx, "  ", yllpx)
+            obj_hgt = int(yllpx - ytlpx)
+            print("robot target object height: ", obj_hgt)
+            logging.info('Robot target object height: {a}'.format (a=obj_hgt))
+                        
+            # call def to calculate range to robot (def calc_range)
+            r_range = calc_range(obj_hgt)
+            print("Robot range: ", r_range)
+            # call def to estimate robot azimuth angle (def calc_az_angle)
+            # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
+        else:
+            pass
+
 i = input("Press 'a' for another image; 'c' to continue: ")
 camera.stop_preview()
 
@@ -108,11 +157,11 @@ camera.stop_preview()
 + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 """
 #while True:
-    
-#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-#   Image Capture
-#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-
+"""    
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+   Image Capture
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+"""
 
 photo = 'apriltags1004.jpg'
 #print("IMAGE: ", photo)
@@ -155,11 +204,12 @@ else:
             # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
         else:
             pass
-                   
-#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-#   Detect Robot(s) Targets
-#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
+"""
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+   Detect Robot(s) Targets
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+"""
 
 #     print("Dimensions: Targets: ", len(result), "Elements: ", len(result[0])) 
 #     print("Results follow:\n", result)
@@ -185,18 +235,15 @@ else:
 #     print("dist = ", d)
 pass
 
-#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-#   Calculate Robot(s) Position
-#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+"""
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+   Calculate Robot(s) Position
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+"""
 
 
-#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-#   Transmit Robot(s) Position to Controller
-#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-
-
-# t3 = time.time()
-# print("start image read: ", t0)
-# print("start image detect: ", t1, "  elapsed time: ", (t1-t0))
-# print("start result: ", t2, "  elapsed time: ", (t2-t1))
-# print("complete: ", t3, "  elapsed time: ", (t3-t2))
+"""
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+   Transmit Robot(s) Position to Controller
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+"""
