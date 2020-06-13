@@ -14,8 +14,8 @@ def signal_handler(sig, frame):
     logging.info('ctrl-c detected')
     sys.exit(0)
 
-def i_capture():
-    file_name = "/home/pi/RPi-Ardunio/apriltags" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.jpg")
+def i_capture(name):
+    file_name = "/home/pi/RPi-Ardunio/" + name + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.jpg")
 #    file_name = "/home/pi/RPi-Ardunio/apriltags" + file_name
 #camera.capture('/home/pi/RPi-Ardunio/apriltags%s.jpg' %j)
     camera.capture(file_name)
@@ -27,8 +27,9 @@ logging.info('Start')
 camera = PiCamera()
 camera.resolution = (1280, 1024)
 #camera.start_preview()
+camera.start_preview(fullscreen=False, window=(100,100,512,384))
 
-schedule.every(1.0).seconds.do(i_capture)
+schedule.every(1.0).seconds.do(i_capture,'clyde')
 
 sleep(2)  # give camera time to stablize
 now = int(round(time.time() * 1000))
@@ -70,5 +71,5 @@ while now < ter:
 # camera.start_recording('video_a.h264')
 # sleep(6)
 # camera.stop_recording()
-#camera.stop_preview()
+camera.stop_preview()
 sys.exit()

@@ -6,3 +6,81 @@
 2020-06-13 13:22:55,394 Running job Every 1.0 second do i_capture() (last run: 2020-06-13 13:22:54, next run: 2020-06-13 13:22:55)
 2020-06-13 13:22:55,906 File name: /home/pi/RPi-Ardunio/apriltags20200613-132255.jpg
 2020-06-13 13:22:56,480 ctrl-c detected
+2020-06-13 16:09:29,849 Start
+2020-06-13 16:09:30,652 File name: /home/pi/RPi-Ardunio/clyde20200613-160930.jpg
+2020-06-13 16:14:53,500 Start
+2020-06-13 16:14:55,761 Running job Every 1.0 second do i_capture('clyde') (last run: [never], next run: 2020-06-13 16:14:54)
+2020-06-13 16:14:56,301 File name: /home/pi/RPi-Ardunio/clyde20200613-161455.jpg
+2020-06-13 16:14:57,302 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:14:56, next run: 2020-06-13 16:14:57)
+2020-06-13 16:14:57,805 File name: /home/pi/RPi-Ardunio/clyde20200613-161457.jpg
+2020-06-13 16:14:58,805 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:14:57, next run: 2020-06-13 16:14:58)
+2020-06-13 16:14:59,321 File name: /home/pi/RPi-Ardunio/clyde20200613-161458.jpg
+2020-06-13 16:15:00,322 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:14:59, next run: 2020-06-13 16:15:00)
+2020-06-13 16:15:00,834 File name: /home/pi/RPi-Ardunio/clyde20200613-161500.jpg
+2020-06-13 16:15:01,835 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:15:00, next run: 2020-06-13 16:15:01)
+2020-06-13 16:15:02,337 File name: /home/pi/RPi-Ardunio/clyde20200613-161501.jpg
+2020-06-13 16:15:03,338 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:15:02, next run: 2020-06-13 16:15:03)
+2020-06-13 16:15:03,854 File name: /home/pi/RPi-Ardunio/clyde20200613-161503.jpg
+2020-06-13 16:15:04,865 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:15:03, next run: 2020-06-13 16:15:04)
+2020-06-13 16:15:05,401 File name: /home/pi/RPi-Ardunio/clyde20200613-161504.jpg
+2020-06-13 16:38:42,040 Start
+2020-06-13 16:38:44,322 Running job Every 1.0 second do i_capture('clyde') (last run: [never], next run: 2020-06-13 16:38:43)
+2020-06-13 16:38:44,860 File name: /home/pi/RPi-Ardunio/clyde20200613-163844.jpg
+2020-06-13 16:38:45,861 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:38:44, next run: 2020-06-13 16:38:45)
+2020-06-13 16:38:46,369 File name: /home/pi/RPi-Ardunio/clyde20200613-163845.jpg
+2020-06-13 16:38:47,370 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:38:46, next run: 2020-06-13 16:38:47)
+2020-06-13 16:38:47,884 File name: /home/pi/RPi-Ardunio/clyde20200613-163847.jpg
+2020-06-13 16:38:48,885 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:38:47, next run: 2020-06-13 16:38:48)
+2020-06-13 16:38:49,397 File name: /home/pi/RPi-Ardunio/clyde20200613-163848.jpg
+2020-06-13 16:38:50,398 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:38:49, next run: 2020-06-13 16:38:50)
+2020-06-13 16:38:50,900 File name: /home/pi/RPi-Ardunio/clyde20200613-163850.jpg
+2020-06-13 16:38:51,901 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:38:50, next run: 2020-06-13 16:38:51)
+2020-06-13 16:38:52,406 File name: /home/pi/RPi-Ardunio/clyde20200613-163851.jpg
+2020-06-13 16:38:53,406 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:38:52, next run: 2020-06-13 16:38:53)
+2020-06-13 16:38:53,911 File name: /home/pi/RPi-Ardunio/clyde20200613-163853.jpg
+2020-06-13 16:39:37,068 Start
+2020-06-13 16:39:39,351 Running job Every 1.0 second do i_capture('clyde') (last run: [never], next run: 2020-06-13 16:39:38)
+2020-06-13 16:39:39,871 File name: /home/pi/RPi-Ardunio/clyde20200613-163939.jpg
+2020-06-13 16:39:40,872 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:39:39, next run: 2020-06-13 16:39:40)
+2020-06-13 16:39:41,370 File name: /home/pi/RPi-Ardunio/clyde20200613-163940.jpg
+2020-06-13 16:39:42,371 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:39:41, next run: 2020-06-13 16:39:42)
+2020-06-13 16:39:42,877 File name: /home/pi/RPi-Ardunio/clyde20200613-163942.jpg
+2020-06-13 16:39:43,878 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:39:42, next run: 2020-06-13 16:39:43)
+2020-06-13 16:39:44,381 File name: /home/pi/RPi-Ardunio/clyde20200613-163943.jpg
+2020-06-13 16:39:45,382 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:39:44, next run: 2020-06-13 16:39:45)
+2020-06-13 16:39:45,888 File name: /home/pi/RPi-Ardunio/clyde20200613-163945.jpg
+2020-06-13 16:39:46,889 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:39:45, next run: 2020-06-13 16:39:46)
+2020-06-13 16:39:47,395 File name: /home/pi/RPi-Ardunio/clyde20200613-163946.jpg
+2020-06-13 16:39:48,396 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:39:47, next run: 2020-06-13 16:39:48)
+2020-06-13 16:39:48,903 File name: /home/pi/RPi-Ardunio/clyde20200613-163948.jpg
+2020-06-13 16:41:57,160 Start
+2020-06-13 16:42:27,193 Start
+2020-06-13 16:42:29,475 Running job Every 1.0 second do i_capture('clyde') (last run: [never], next run: 2020-06-13 16:42:28)
+2020-06-13 16:42:29,990 File name: /home/pi/RPi-Ardunio/clyde20200613-164229.jpg
+2020-06-13 16:42:30,991 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:42:29, next run: 2020-06-13 16:42:30)
+2020-06-13 16:42:31,493 File name: /home/pi/RPi-Ardunio/clyde20200613-164230.jpg
+2020-06-13 16:42:32,493 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:42:31, next run: 2020-06-13 16:42:32)
+2020-06-13 16:42:32,998 File name: /home/pi/RPi-Ardunio/clyde20200613-164232.jpg
+2020-06-13 16:42:33,999 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:42:32, next run: 2020-06-13 16:42:33)
+2020-06-13 16:42:34,504 File name: /home/pi/RPi-Ardunio/clyde20200613-164234.jpg
+2020-06-13 16:42:35,505 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:42:34, next run: 2020-06-13 16:42:35)
+2020-06-13 16:42:36,020 File name: /home/pi/RPi-Ardunio/clyde20200613-164235.jpg
+2020-06-13 16:42:37,022 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:42:36, next run: 2020-06-13 16:42:37)
+2020-06-13 16:42:37,534 File name: /home/pi/RPi-Ardunio/clyde20200613-164237.jpg
+2020-06-13 16:42:38,535 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:42:37, next run: 2020-06-13 16:42:38)
+2020-06-13 16:42:39,038 File name: /home/pi/RPi-Ardunio/clyde20200613-164238.jpg
+2020-06-13 16:43:33,761 Start
+2020-06-13 16:43:36,046 Running job Every 1.0 second do i_capture('clyde') (last run: [never], next run: 2020-06-13 16:43:35)
+2020-06-13 16:43:36,561 File name: /home/pi/RPi-Ardunio/clyde20200613-164336.jpg
+2020-06-13 16:43:37,562 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:43:36, next run: 2020-06-13 16:43:37)
+2020-06-13 16:43:38,068 File name: /home/pi/RPi-Ardunio/clyde20200613-164337.jpg
+2020-06-13 16:43:39,069 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:43:38, next run: 2020-06-13 16:43:39)
+2020-06-13 16:43:39,581 File name: /home/pi/RPi-Ardunio/clyde20200613-164339.jpg
+2020-06-13 16:43:40,582 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:43:39, next run: 2020-06-13 16:43:40)
+2020-06-13 16:43:41,094 File name: /home/pi/RPi-Ardunio/clyde20200613-164340.jpg
+2020-06-13 16:43:42,095 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:43:41, next run: 2020-06-13 16:43:42)
+2020-06-13 16:43:42,602 File name: /home/pi/RPi-Ardunio/clyde20200613-164342.jpg
+2020-06-13 16:43:43,603 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:43:42, next run: 2020-06-13 16:43:43)
+2020-06-13 16:43:44,109 File name: /home/pi/RPi-Ardunio/clyde20200613-164343.jpg
+2020-06-13 16:43:45,110 Running job Every 1.0 second do i_capture('clyde') (last run: 2020-06-13 16:43:44, next run: 2020-06-13 16:43:45)
+2020-06-13 16:43:45,614 File name: /home/pi/RPi-Ardunio/clyde20200613-164345.jpg

@@ -3,8 +3,10 @@
 # at a fixed location, detect the apriltag of each robot in the arena,
 # estimate each robots position (x,y in arena coordinates) and transmit
 # to the controller
-#
 
+from picamera import PiCamera
+from time import sleep
+import datetime
 import apriltag
 import cv2
 import math
@@ -14,19 +16,20 @@ import os
 import sys
 import signal
 import logging
+import schedule
 
-logging.basicConfig(filename='logLocal.log', level=logging.INFO, format='%(asctime)s %(message)s')
+
 
 def signal_handler(sig, frame):
     print('ctrl-c detected')
     logging.info('ctrl-c detected')
     sys.exit(0)
-    
-# insert parameters and constants
-xcpx = 0  # x(px) center of robot tag
-ycpx = 0  # y(px) center of robot tag
-ytlpx = 0  # y coor of top left px of robot tag
-yllpx = 0  # y coor of lower left px of robot tag
+
+def i_capture(name):
+    file_name = "/home/pi/RPi-Ardunio/" + name + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.jpg")
+    camera.capture(file_name)
+    print('\n', file_name)
+    logging.info('File name: {a}'.format (a=file_name))
 
 def extract_center(result, i):
     # result (input): apriltag detection list/array
@@ -58,14 +61,58 @@ def calc_range(obj_hgt):
     r_range = (focal_len * real_hgt * image_hgt)/(obj_hgt * sensor_hgt)
     return r_range
 
-# insert code to capture an image every second
+"""
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+   Initialization and Setup
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+"""
+logging.basicConfig(filename='log_Localization.log', level=logging.INFO, format='%(asctime)s %(message)s')
 signal.signal(signal.SIGINT, signal_handler)
+schedule.every(1.0).seconds.do(i_capture)
+
+# insert parameters and constants
+
+camera = PiCamera()
+camera.resolution = (1280, 1024)
+
+xcpx = 0  # x(px) center of robot tag
+ycpx = 0  # y(px) center of robot tag
+ytlpx = 0  # y coor of top left px of robot tag
+yllpx = 0  # y coor of lower left px of robot tag
 
 # after capturing image and writing to file, this code picks up most recent file
-list_files = glob.glob('*.jpg')
+list_files = glob.glob('/home/pi/RPi-Ardunio/*.jpg')
 latest_file = max(list_files, key=os.path.getctime)
 print ("newest image file: ", latest_file)
 logging.info('Newest image file: {a}'.format (a=latest_file))
+
+"""
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+   Calibration
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+"""
+logging.info('Calibration start')
+camera.start_preview(fullscreen=False, window=(100,100,512,384))
+sleep(2)  # give camera time to stablize
+i_capture('calibration')
+list_files = glob.glob('/home/pi/RPi-Ardunio/*.jpg')
+cal_image = max(list_files, key=os.path.getctime)
+print ("calibration image file: ", cal_image)
+logging.info('Calibration image file: {a}'.format (a=cal_image))
+i = input("Press 'a' for another image; 'c' to continue: ")
+camera.stop_preview()
+
+"""
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+    MAIN LOOP
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+"""
+#while True:
+    
+#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+#   Image Capture
+#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
 
 photo = 'apriltags1004.jpg'
 #print("IMAGE: ", photo)
@@ -109,6 +156,9 @@ else:
         else:
             pass
                    
+#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+#   Detect Robot(s) Targets
+#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 
 #     print("Dimensions: Targets: ", len(result), "Elements: ", len(result[0])) 
@@ -134,6 +184,17 @@ else:
 #     d = math.sqrt(d)
 #     print("dist = ", d)
 pass
+
+#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+#   Calculate Robot(s) Position
+#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+
+#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+#   Transmit Robot(s) Position to Controller
+#= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+
 # t3 = time.time()
 # print("start image read: ", t0)
 # print("start image detect: ", t1, "  elapsed time: ", (t1-t0))
