@@ -1,0 +1,8 @@
+2020-06-13 13:22:50,084 Start
+2020-06-13 13:22:52,348 Running job Every 1.0 second do i_capture() (last run: [never], next run: 2020-06-13 13:22:51)
+2020-06-13 13:22:52,887 File name: /home/pi/RPi-Ardunio/apriltags20200613-132252.jpg
+2020-06-13 13:22:53,888 Running job Every 1.0 second do i_capture() (last run: 2020-06-13 13:22:52, next run: 2020-06-13 13:22:53)
+2020-06-13 13:22:54,393 File name: /home/pi/RPi-Ardunio/apriltags20200613-132253.jpg
+2020-06-13 13:22:55,394 Running job Every 1.0 second do i_capture() (last run: 2020-06-13 13:22:54, next run: 2020-06-13 13:22:55)
+2020-06-13 13:22:55,906 File name: /home/pi/RPi-Ardunio/apriltags20200613-132255.jpg
+2020-06-13 13:22:56,480 ctrl-c detected

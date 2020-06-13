@@ -2,13 +2,17 @@ from picamera import PiCamera
 from time import sleep
 import datetime
 import sys
+import signal
 import threading
 import time
 import schedule
 import logging
 logging.basicConfig(filename='logCamera.log', level=logging.INFO, format='%(asctime)s %(message)s')
 
-
+def signal_handler(sig, frame):
+    print('ctrl-c detected')
+    logging.info('ctrl-c detected')
+    sys.exit(0)
 
 def i_capture():
     file_name = "/home/pi/RPi-Ardunio/apriltags" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.jpg")
@@ -17,11 +21,12 @@ def i_capture():
     camera.capture(file_name)
     print('\n', file_name)
     logging.info('File name: {a}'.format (a=file_name))
-    
+
+signal.signal(signal.SIGINT, signal_handler)
 logging.info('Start')
 camera = PiCamera()
 camera.resolution = (1280, 1024)
-camera.start_preview()
+#camera.start_preview()
 
 schedule.every(1.0).seconds.do(i_capture)
 
@@ -65,5 +70,5 @@ while now < ter:
 # camera.start_recording('video_a.h264')
 # sleep(6)
 # camera.stop_recording()
-camera.stop_preview()
+#camera.stop_preview()
 sys.exit()
