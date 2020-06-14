@@ -62,6 +62,17 @@ def calc_range(obj_hgt):
     r_range = (focal_len * real_hgt * image_hgt)/(obj_hgt * sensor_hgt)
     return r_range
 
+def readGndT(gndTfilename):
+    with open(gndTfilename, 'r') as csvfile:
+        csvreader = csv.reader(csvfile)
+        titles = next(csvreader)
+    
+        for target in csvreader:
+            targets.append(target)
+        
+    logging.info('Targets read and returned: {a}'.format (a=targets))
+    return targets
+
 """
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
    Initialization and Setup
@@ -77,7 +88,7 @@ schedule.every(1.0).seconds.do(i_capture)
 camera = PiCamera()
 camera.resolution = (1280, 1024)
 # CSV file parameters
-gnd_t = "gndTrth.csv"
+gndTfilename = "gndTrth.csv"
 titles = []
 targets = []
 
@@ -99,16 +110,8 @@ logging.info('Newest image file: {a}'.format (a=latest_file))
 """
 logging.info('Calibration start')
 # read ground truth file with fiducial target parameters
-with open(gnd_t, 'r') as csvfile:
-    csvreader = csv.reader(csvfile)
-    titles = next(csvreader)
-    
-    for target in csvreader:
-        targets.append(target)
-print('\n', "len of csv file: ", len(targets))
-print('\n', targets)
-print('\n', "tag 1 measured dist: ", targets[2][4])
-logging.info('Tarets from csv file: {a}'.format (a=targets))
+targets = readGndT(gndTfilename)
+logging.info('Targets from csv file: {a}'.format (a=targets))
 
 camera.start_preview(fullscreen=False, window=(100,100,512,384))
 sleep(2)  # give camera time to stablize
