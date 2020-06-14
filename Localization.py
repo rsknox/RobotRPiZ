@@ -54,7 +54,7 @@ def extract_corner(result, i):
 def calc_range(obj_hgt):
     # set up constants:
     focal_len = 3.6  # camera focal length in mm
-    real_hgt = 43  # robot target height in mm
+    real_hgt = 87  # robot target height in mm
     image_hgt = 1024  # image height in px
     sensor_hgt = 2.74  # sensor height in mm
     # obj_hgt (input) in px
@@ -113,7 +113,7 @@ logging.info('Calibration start')
 targets = readGndT(gndTfilename)
 logging.info('Targets from csv file: {a}'.format (a=targets))
 
-camera.start_preview(fullscreen=False, window=(100,100,512,384))
+camera.start_preview(fullscreen=False, window=(700,100,512,384))
 sleep(2)  # give camera time to stablize
 i_capture('calibration')
 list_files = glob.glob('/home/pi/RPi-Ardunio/*.jpg')
@@ -122,8 +122,8 @@ print ("calibration image file: ", cal_image)
 logging.info('Calibration image file: {a}'.format (a=cal_image))
 img = cv2.imread(cal_image,cv2.IMREAD_GRAYSCALE)
 #stub code for test
-photo = 'apriltags1004.jpg'
-img = cv2.imread(photo,cv2.IMREAD_GRAYSCALE)
+# photo = 'apriltags1004.jpg'
+# img = cv2.imread(photo,cv2.IMREAD_GRAYSCALE)
 
 detector = apriltag.Detector()
 
@@ -134,19 +134,19 @@ if result == []:
 else:
     for i in range(len(result)):
         # look for targets on robot(s) as of this writing apriltag #499
-        if result[i].tag_id != 499:
+        if result[i].tag_id != 99:
             # call def to extract center x,y pixels
             xcpx, ycpx = extract_center(result, i)
-#            print("tag id= ", i, "  target center: ", xcpx, "  ", ycpx)
+            print('\n', "tag id= ", result[i].tag_id, "  target center: ", xcpx, "  ", ycpx)
            
             # call def to extract top left and lower left corner y pixels
             # only need the y-coord as calculating the height of the tag
             # scroll through the ground truth targets looking for a tag match
             for k in range(len(targets)):
-                
+                #print('\n', 'k= ', k, ' targets tag= ',targets[k][0],' detected tag= ',result[i].tag_id, ' xcpx= ', xcpx)
                 if int(targets[k][0]) == int(result[i].tag_id):
-                    # if gndT tag id matches detected tag id, write px coord to the list
-                    print('\n', 'k= ', k, ' targets tag= ',targets[k][0],' detected tag= ',result[i].tag_id, ' xcpx= ', xcpx)
+                    
+                    # if gndT tag id matches detected tag id, write px coord to the list                 
                     targets[k][6] = int(xcpx)
                     targets[k][7] = int(ycpx)                           
             
