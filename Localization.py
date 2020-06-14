@@ -167,7 +167,7 @@ photo = 'apriltags1004.jpg'
 #print("IMAGE: ", photo)
 t0 = time.time()
 #print("start image read: ", t0)
-logging.info('Start image read: {a}'.format (a=t0))
+logging.info('Start image read')
 img = cv2.imread(photo,cv2.IMREAD_GRAYSCALE)
 img = cv2.imread(latest_file,cv2.IMREAD_GRAYSCALE)
 #print("image size: ",img.shape)
