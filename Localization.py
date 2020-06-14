@@ -108,6 +108,7 @@ with open(gnd_t, 'r') as csvfile:
 print('\n', "len of csv file: ", len(targets))
 print('\n', targets)
 print('\n', "tag 1 measured dist: ", targets[2][4])
+logging.info('Tarets from csv file: {a}'.format (a=targets))
 
 camera.start_preview(fullscreen=False, window=(100,100,512,384))
 sleep(2)  # give camera time to stablize
