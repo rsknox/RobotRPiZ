@@ -98,10 +98,10 @@ ytlpx = 0  # y coor of top left px of robot tag
 yllpx = 0  # y coor of lower left px of robot tag
 
 # after capturing image and writing to file, this code picks up most recent file
-list_files = glob.glob('/home/pi/RPi-Ardunio/*.jpg')
-latest_file = max(list_files, key=os.path.getctime)
-print ("newest image file: ", latest_file)
-logging.info('Newest image file: {a}'.format (a=latest_file))
+# list_files = glob.glob('/home/pi/RPi-Ardunio/*.jpg')
+# latest_file = max(list_files, key=os.path.getctime)
+# print ("newest image file: ", latest_file)
+# logging.info('Newest image file: {a}'.format (a=latest_file))
 
 """
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -121,6 +121,9 @@ cal_image = max(list_files, key=os.path.getctime)
 print ("calibration image file: ", cal_image)
 logging.info('Calibration image file: {a}'.format (a=cal_image))
 img = cv2.imread(cal_image,cv2.IMREAD_GRAYSCALE)
+#stub code for test
+photo = 'apriltags1004.jpg'
+img = cv2.imread(photo,cv2.IMREAD_GRAYSCALE)
 
 detector = apriltag.Detector()
 
@@ -138,6 +141,16 @@ else:
            
             # call def to extract top left and lower left corner y pixels
             # only need the y-coord as calculating the height of the tag
+            # scroll through the ground truth targets looking for a tag match
+            for k in range(len(targets)):
+                
+                if int(targets[k][0]) == int(result[i].tag_id):
+                    # if gndT tag id matches detected tag id, write px coord to the list
+                    print('\n', 'k= ', k, ' targets tag= ',targets[k][0],' detected tag= ',result[i].tag_id, ' xcpx= ', xcpx)
+                    targets[k][6] = int(xcpx)
+                    targets[k][7] = int(ycpx)                           
+            
+            logging.info('Detected tags added to list: {a}'.format (a=targets))
             ytlpx, yllpx = extract_corner(result, i)
             print("left corners: ", ytlpx, "  ", yllpx)
             obj_hgt = int(yllpx - ytlpx)
