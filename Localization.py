@@ -54,7 +54,7 @@ def extract_corner(result, i):
 def calc_range(obj_hgt):
     # set up constants:
     focal_len = 3.6  # camera focal length in mm
-    real_hgt = 87  # robot target height in mm
+    real_hgt = 86  # robot target height in mm
     image_hgt = 1024  # image height in px
     sensor_hgt = 2.74  # sensor height in mm
     # obj_hgt (input) in px
