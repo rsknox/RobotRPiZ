@@ -127,9 +127,6 @@ while l==0:
     print ("calibration image file: ", cal_image)
     logging.info('Calibration image file: {a}'.format (a=cal_image))
     img = cv2.imread(cal_image,cv2.IMREAD_GRAYSCALE)
-    #stub code for test
-    # photo = 'apriltags1004.jpg'
-    # img = cv2.imread(photo,cv2.IMREAD_GRAYSCALE)
 
     detector = apriltag.Detector()
 
@@ -147,26 +144,31 @@ while l==0:
                
                 # call def to extract top left and lower left corner y pixels
                 # only need the y-coord as calculating the height of the tag
+                ytlpx, yllpx = extract_corner(result, i)
+                print("left corners: ", ytlpx, "  ", yllpx)
+                obj_hgt = int(yllpx - ytlpx)
+                print("Fiducial target object height: ", obj_hgt)
+                            
+                # call def to calculate range to robot (def calc_range)
+                              
+                
                 # scroll through the ground truth targets looking for a tag match
                 for k in range(len(targets)):
                     #print('\n', 'k= ', k, ' targets tag= ',targets[k][0],' detected tag= ',result[i].tag_id, ' xcpx= ', xcpx)
                     if int(targets[k][0]) == int(result[i].tag_id):
-                        
-                        # if gndT tag id matches detected tag id, write px coord to the list                 
+                                                # if gndT tag id matches detected tag id, write px coord to the list                 
                         targets[k][7] = int(xcpx)
                         targets[k][8] = int(ycpx)
                         r_hgt = float(targets[k][6])
+                        
+                        r_range = calc_range(obj_hgt, r_hgt)
+                        targets[k][9] = float(r_range)
+                        print("Fiducial range: ", r_range)
+                        logging.info('Fiducial target object height and range: {a}, {b}'.format (a=obj_hgt, b=r_range))
+
                 
                 logging.info('Detected tags added to list: {a}'.format (a=targets))
-                ytlpx, yllpx = extract_corner(result, i)
-                print("left corners: ", ytlpx, "  ", yllpx)
-                obj_hgt = int(yllpx - ytlpx)
-                print("robot target object height: ", obj_hgt)
-                logging.info('Robot target object height: {a}'.format (a=obj_hgt))
-                            
-                # call def to calculate range to robot (def calc_range)
-                r_range = calc_range(obj_hgt, r_hgt)
-                print("Robot range: ", r_range)
+                
                 # call def to estimate robot azimuth angle (def calc_az_angle)
                 # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
             else:
@@ -220,11 +222,12 @@ while True:
             print("left corners: ", ytlpx, "  ", yllpx)
             obj_hgt = int(yllpx - ytlpx)
             print("robot target object height: ", obj_hgt)
-            logging.info('Robot target object height: {a}'.format (a=obj_hgt))
+            
                         
             # call def to calculate range to robot (def calc_range)
             r_range = calc_range(obj_hgt, 51)
             print("Robot range: ", r_range)
+            logging.info('Robot target object height and range: {a} | {b}'.format (a=obj_hgt, b=r_range))
             # call def to estimate robot azimuth angle (def calc_az_angle)
             # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
 
