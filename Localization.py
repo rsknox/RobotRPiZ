@@ -51,13 +51,13 @@ def extract_corner(result, i):
     yllpx = result[i].corners[3,1]
     return ytlpx, yllpx
 
-def calc_range(obj_hgt):
+def calc_range(obj_hgt, real_hgt):
     # set up constants:
     focal_len = 3.6  # camera focal length in mm
-    real_hgt = 86  # robot target height in mm
     image_hgt = 1024  # image height in px
     sensor_hgt = 2.74  # sensor height in mm
     # obj_hgt (input) in px
+    # real_hgt (input) in mm
     # r_range is output in mm
     r_range = (focal_len * real_hgt * image_hgt)/(obj_hgt * sensor_hgt)
     return r_range
@@ -147,8 +147,9 @@ else:
                 if int(targets[k][0]) == int(result[i].tag_id):
                     
                     # if gndT tag id matches detected tag id, write px coord to the list                 
-                    targets[k][6] = int(xcpx)
-                    targets[k][7] = int(ycpx)                           
+                    targets[k][7] = int(xcpx)
+                    targets[k][8] = int(ycpx)
+                    r_hgt = float(targets[k][6])
             
             logging.info('Detected tags added to list: {a}'.format (a=targets))
             ytlpx, yllpx = extract_corner(result, i)
@@ -158,7 +159,20 @@ else:
             logging.info('Robot target object height: {a}'.format (a=obj_hgt))
                         
             # call def to calculate range to robot (def calc_range)
-            r_range = calc_range(obj_hgt)
+            print('\n', 'targets k,0: ', targets[k][0])
+            print('targets k,1: ', targets[k][1])
+            print('targets k,2: ', targets[k][2])
+            print('targets k,3: ', targets[k][3])
+            print('targets k,4: ', targets[k][4])
+            print('targets k,5: ', targets[k][5])
+            print('targets k,6: ', targets[k][6])
+            print('targets k,7: ', targets[k][7])
+            print('targets k,8: ', targets[k][8])
+            print('targets k,9: ', targets[k][9])
+            print('targets k,10: ', targets[k][10])
+            
+            print('\n', 'targets k,6: ', targets[k][6],' real height: ', r_hgt)
+            r_range = calc_range(obj_hgt, r_hgt)
             print("Robot range: ", r_range)
             # call def to estimate robot azimuth angle (def calc_az_angle)
             # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
