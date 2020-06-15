@@ -81,7 +81,7 @@ def readGndT(gndTfilename):
 
 logging.basicConfig(filename='log_Localization.log', level=logging.INFO, format='%(asctime)s %(message)s')
 signal.signal(signal.SIGINT, signal_handler)
-schedule.every(1.0).seconds.do(i_capture)
+schedule.every(1.0).seconds.do(i_capture,'track_i')
 
 # insert parameters and constants
 
@@ -115,7 +115,10 @@ logging.info('Targets from csv file: {a}'.format (a=targets))
 
 camera.start_preview(fullscreen=False, window=(700,100,512,384))
 sleep(2)  # give camera time to stablize
-l=0
+
+l=0 # will loop and capture calibration images until tag 0 is in center
+    # asks for input at end of loop enter either '0' loop again or non-zero
+    # to continue with the program
 while l==0:
     
     i_capture('calibration')
@@ -137,7 +140,7 @@ while l==0:
     else:
         for i in range(len(result)):
             # look for targets on robot(s) as of this writing apriltag #499
-            if result[i].tag_id != 99:
+            if result[i].tag_id != 499:
                 # call def to extract center x,y pixels
                 xcpx, ycpx = extract_center(result, i)
                 print('\n', "tag id= ", result[i].tag_id, "  target center: ", xcpx, "  ", ycpx)
@@ -171,91 +174,65 @@ while l==0:
 
     l = input("Press '0' for another image; '1' to continue: ")
     l = int(l)
-camera.stop_preview()
+
 
 """
 +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
     MAIN LOOP
 +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
 """
-#while True:
-"""    
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+while True:
+    """    
+    = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
    Image Capture
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-"""
+    = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    """
+    #camera.start_preview(fullscreen=False, window=(100,100,512,384))
 
-photo = 'apriltags1004.jpg'
-#print("IMAGE: ", photo)
-t0 = time.time()
-#print("start image read: ", t0)
-logging.info('Start image read')
-img = cv2.imread(photo,cv2.IMREAD_GRAYSCALE)
-img = cv2.imread(latest_file,cv2.IMREAD_GRAYSCALE)
-#print("image size: ",img.shape)
+    #schedule.every(1.0).seconds.do(i_capture,'track_i')
+    # following code is to limit the test cycle to x (nominal 10) sec
+    now = int(round(time.time() * 1000))
+    ter = now + 10000
+    while now < ter:
+        schedule.run_pending()
+        now = int(round(time.time() * 1000))
+        """
+        = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        Detect Robot(s) Targets
+        = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        """
+        list_files = glob.glob('/home/pi/RPi-Ardunio/*.jpg')
+        track_image = max(list_files, key=os.path.getctime)
+        print ("track image file: ", track_image)
+        logging.info('track image file: {a}'.format (a=track_image))
+        img = cv2.imread(cal_image,cv2.IMREAD_GRAYSCALE)
 
-#t1 = time.time()
+        detector = apriltag.Detector()
 
-detector = apriltag.Detector()
-#t2 = time.time()
+        result = detector.detect(img)
+        xcpx = -1 # used to check if no robot target detected
+        for i in range(len(result)):
+            # look for targets on robot(s) as of this writing apriltag #499
+            if result[i].tag_id == 499:
+                # call def to extract center x,y pixels
+                xcpx, ycpx = extract_center(result, i)
+                print('\n', "tag id= ", result[i].tag_id, "  target center: ", xcpx, "  ", ycpx)
+                ytlpx, yllpx = extract_corner(result, i)
+                print("left corners: ", ytlpx, "  ", yllpx)
+                obj_hgt = int(yllpx - ytlpx)
+                print("robot target object height: ", obj_hgt)
+                logging.info('Robot target object height: {a}'.format (a=obj_hgt))
+                            
+                # call def to calculate range to robot (def calc_range)
+                r_range = calc_range(obj_hgt, 51)
+                print("Robot range: ", r_range)
+                # call def to estimate robot azimuth angle (def calc_az_angle)
+                # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
 
-result = detector.detect(img)
-if result == []:
-    print ("Empty arrary - no targets found")
-    logging.info('Empty array')
-else:
-    for i in range(len(result)):
-        # look for targets on robot(s) as of this writing apriltag #499
-        if result[i].tag_id == 5:
-            # call def to extract center x,y pixels
-            xcpx, ycpx = extract_center(result, i)
-#            print("tag id= ", i, "  target center: ", xcpx, "  ", ycpx)
-           
-            # call def to extract top left and lower left corner y pixels
-            # only need the y-coord as calculating the height of the tag
-            ytlpx, yllpx = extract_corner(result, i)
-            print("left corners: ", ytlpx, "  ", yllpx)
-            obj_hgt = int(yllpx - ytlpx)
-            print("robot target object height: ", obj_hgt)
-            logging.info('Robot target object height: {a}'.format (a=obj_hgt))
-                        
-            # call def to calculate range to robot (def calc_range)
-            r_range = calc_range(obj_hgt)
-            print("Robot range: ", r_range)
-            # call def to estimate robot azimuth angle (def calc_az_angle)
-            # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
-        else:
-            pass
+        if xcpx <0:
+            print ("No targets detected")
+            logging.info('No targets detected')
 
-"""
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-   Detect Robot(s) Targets
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-"""
-
-#     print("Dimensions: Targets: ", len(result), "Elements: ", len(result[0])) 
-#     print("Results follow:\n", result)
-#     tf = result[0].tag_family
-#     print(tf)
-#     tid = result[0].tag_id
-#     print(tid)
-#     cx0 = result[0].center[0]
-#     cy0 = result[0].center[1]
-#     print("center: x= ", cx0, " y= ", cy0)
-# 
-#     tf = result[1].tag_family
-#     print(tf)
-#     tid = result[1].tag_id
-#     print(tid)
-#     cx1 = result[1].center[0]
-#     cy1 = result[1].center[1]
-#     print("center: x= ", cx1, " y= ", cy1)
-# 
-#     # calculate and print dist between target centers
-#     d = (cx1-cx0)**2 + (cy1-cy0)**2
-#     d = math.sqrt(d)
-#     print("dist = ", d)
-pass
 
 """
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -269,3 +246,5 @@ pass
    Transmit Robot(s) Position to Controller
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 """
+camera.stop_preview()
+sys.exit()
