@@ -190,48 +190,47 @@ while True:
     #camera.start_preview(fullscreen=False, window=(100,100,512,384))
 
     #schedule.every(1.0).seconds.do(i_capture,'track_i')
-    # following code is to limit the test cycle to x (nominal 10) sec
-    now = int(round(time.time() * 1000))
-    ter = now + 10000
-    while now < ter:
-        schedule.run_pending()
-        now = int(round(time.time() * 1000))
-        """
-        = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-        Detect Robot(s) Targets
-        = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-        """
-        list_files = glob.glob('/home/pi/RPi-Ardunio/*.jpg')
-        track_image = max(list_files, key=os.path.getctime)
-        print ("track image file: ", track_image)
-        logging.info('track image file: {a}'.format (a=track_image))
-        img = cv2.imread(cal_image,cv2.IMREAD_GRAYSCALE)
+    
+    #Use ctrl-c to terminate
 
-        detector = apriltag.Detector()
+    schedule.run_pending()
 
-        result = detector.detect(img)
-        xcpx = -1 # used to check if no robot target detected
-        for i in range(len(result)):
-            # look for targets on robot(s) as of this writing apriltag #499
-            if result[i].tag_id == 499:
-                # call def to extract center x,y pixels
-                xcpx, ycpx = extract_center(result, i)
-                print('\n', "tag id= ", result[i].tag_id, "  target center: ", xcpx, "  ", ycpx)
-                ytlpx, yllpx = extract_corner(result, i)
-                print("left corners: ", ytlpx, "  ", yllpx)
-                obj_hgt = int(yllpx - ytlpx)
-                print("robot target object height: ", obj_hgt)
-                logging.info('Robot target object height: {a}'.format (a=obj_hgt))
-                            
-                # call def to calculate range to robot (def calc_range)
-                r_range = calc_range(obj_hgt, 51)
-                print("Robot range: ", r_range)
-                # call def to estimate robot azimuth angle (def calc_az_angle)
-                # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
+    """
+    = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    Detect Robot(s) Targets
+    = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    """
+    list_files = glob.glob('/home/pi/RPi-Ardunio/*.jpg')
+    track_image = max(list_files, key=os.path.getctime)
+    print ("track image file: ", track_image)
+    logging.info('track image file: {a}'.format (a=track_image))
+    img = cv2.imread(track_image,cv2.IMREAD_GRAYSCALE)
 
-        if xcpx <0:
-            print ("No targets detected")
-            logging.info('No targets detected')
+    detector = apriltag.Detector()
+
+    result = detector.detect(img)
+    xcpx = -1 # used to check if no robot target detected
+    for i in range(len(result)):
+        # look for targets on robot(s) as of this writing apriltag #499
+        if result[i].tag_id == 499:
+            # call def to extract center x,y pixels
+            xcpx, ycpx = extract_center(result, i)
+            print('\n', "tag id= ", result[i].tag_id, "  target center: ", xcpx, "  ", ycpx)
+            ytlpx, yllpx = extract_corner(result, i)
+            print("left corners: ", ytlpx, "  ", yllpx)
+            obj_hgt = int(yllpx - ytlpx)
+            print("robot target object height: ", obj_hgt)
+            logging.info('Robot target object height: {a}'.format (a=obj_hgt))
+                        
+            # call def to calculate range to robot (def calc_range)
+            r_range = calc_range(obj_hgt, 51)
+            print("Robot range: ", r_range)
+            # call def to estimate robot azimuth angle (def calc_az_angle)
+            # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
+
+    if xcpx <0:
+        print ("No targets detected")
+        logging.info('No targets detected')
 
 
 """
