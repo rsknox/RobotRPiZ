@@ -115,71 +115,62 @@ logging.info('Targets from csv file: {a}'.format (a=targets))
 
 camera.start_preview(fullscreen=False, window=(700,100,512,384))
 sleep(2)  # give camera time to stablize
-i_capture('calibration')
-list_files = glob.glob('/home/pi/RPi-Ardunio/*.jpg')
-cal_image = max(list_files, key=os.path.getctime)
-print ("calibration image file: ", cal_image)
-logging.info('Calibration image file: {a}'.format (a=cal_image))
-img = cv2.imread(cal_image,cv2.IMREAD_GRAYSCALE)
-#stub code for test
-# photo = 'apriltags1004.jpg'
-# img = cv2.imread(photo,cv2.IMREAD_GRAYSCALE)
+l=0
+while l==0:
+    
+    i_capture('calibration')
+    list_files = glob.glob('/home/pi/RPi-Ardunio/*.jpg')
+    cal_image = max(list_files, key=os.path.getctime)
+    print ("calibration image file: ", cal_image)
+    logging.info('Calibration image file: {a}'.format (a=cal_image))
+    img = cv2.imread(cal_image,cv2.IMREAD_GRAYSCALE)
+    #stub code for test
+    # photo = 'apriltags1004.jpg'
+    # img = cv2.imread(photo,cv2.IMREAD_GRAYSCALE)
 
-detector = apriltag.Detector()
+    detector = apriltag.Detector()
 
-result = detector.detect(img)
-if result == []:
-    print ("Empty arrary - no targets found")
-    logging.info('Empty array')
-else:
-    for i in range(len(result)):
-        # look for targets on robot(s) as of this writing apriltag #499
-        if result[i].tag_id != 99:
-            # call def to extract center x,y pixels
-            xcpx, ycpx = extract_center(result, i)
-            print('\n', "tag id= ", result[i].tag_id, "  target center: ", xcpx, "  ", ycpx)
-           
-            # call def to extract top left and lower left corner y pixels
-            # only need the y-coord as calculating the height of the tag
-            # scroll through the ground truth targets looking for a tag match
-            for k in range(len(targets)):
-                #print('\n', 'k= ', k, ' targets tag= ',targets[k][0],' detected tag= ',result[i].tag_id, ' xcpx= ', xcpx)
-                if int(targets[k][0]) == int(result[i].tag_id):
-                    
-                    # if gndT tag id matches detected tag id, write px coord to the list                 
-                    targets[k][7] = int(xcpx)
-                    targets[k][8] = int(ycpx)
-                    r_hgt = float(targets[k][6])
-            
-            logging.info('Detected tags added to list: {a}'.format (a=targets))
-            ytlpx, yllpx = extract_corner(result, i)
-            print("left corners: ", ytlpx, "  ", yllpx)
-            obj_hgt = int(yllpx - ytlpx)
-            print("robot target object height: ", obj_hgt)
-            logging.info('Robot target object height: {a}'.format (a=obj_hgt))
+    result = detector.detect(img)
+    if result == []:
+        print ("Empty arrary - no targets found")
+        logging.info('Empty array')
+    else:
+        for i in range(len(result)):
+            # look for targets on robot(s) as of this writing apriltag #499
+            if result[i].tag_id != 99:
+                # call def to extract center x,y pixels
+                xcpx, ycpx = extract_center(result, i)
+                print('\n', "tag id= ", result[i].tag_id, "  target center: ", xcpx, "  ", ycpx)
+               
+                # call def to extract top left and lower left corner y pixels
+                # only need the y-coord as calculating the height of the tag
+                # scroll through the ground truth targets looking for a tag match
+                for k in range(len(targets)):
+                    #print('\n', 'k= ', k, ' targets tag= ',targets[k][0],' detected tag= ',result[i].tag_id, ' xcpx= ', xcpx)
+                    if int(targets[k][0]) == int(result[i].tag_id):
                         
-            # call def to calculate range to robot (def calc_range)
-            print('\n', 'targets k,0: ', targets[k][0])
-            print('targets k,1: ', targets[k][1])
-            print('targets k,2: ', targets[k][2])
-            print('targets k,3: ', targets[k][3])
-            print('targets k,4: ', targets[k][4])
-            print('targets k,5: ', targets[k][5])
-            print('targets k,6: ', targets[k][6])
-            print('targets k,7: ', targets[k][7])
-            print('targets k,8: ', targets[k][8])
-            print('targets k,9: ', targets[k][9])
-            print('targets k,10: ', targets[k][10])
-            
-            print('\n', 'targets k,6: ', targets[k][6],' real height: ', r_hgt)
-            r_range = calc_range(obj_hgt, r_hgt)
-            print("Robot range: ", r_range)
-            # call def to estimate robot azimuth angle (def calc_az_angle)
-            # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
-        else:
-            pass
+                        # if gndT tag id matches detected tag id, write px coord to the list                 
+                        targets[k][7] = int(xcpx)
+                        targets[k][8] = int(ycpx)
+                        r_hgt = float(targets[k][6])
+                
+                logging.info('Detected tags added to list: {a}'.format (a=targets))
+                ytlpx, yllpx = extract_corner(result, i)
+                print("left corners: ", ytlpx, "  ", yllpx)
+                obj_hgt = int(yllpx - ytlpx)
+                print("robot target object height: ", obj_hgt)
+                logging.info('Robot target object height: {a}'.format (a=obj_hgt))
+                            
+                # call def to calculate range to robot (def calc_range)
+                r_range = calc_range(obj_hgt, r_hgt)
+                print("Robot range: ", r_range)
+                # call def to estimate robot azimuth angle (def calc_az_angle)
+                # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
+            else:
+                pass
 
-i = input("Press 'a' for another image; 'c' to continue: ")
+    l = input("Press '0' for another image; '1' to continue: ")
+    l = int(l)
 camera.stop_preview()
 
 """
