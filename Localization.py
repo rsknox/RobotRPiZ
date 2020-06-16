@@ -161,7 +161,7 @@ while l==0:
                         targets[k][8] = int(ycpx)
                         r_hgt = float(targets[k][6])                       
                         r_range = calc_range(obj_hgt, r_hgt)
-                        targets[k][9] = float(r_range)
+                        targets[k][9] = int(r_range)
                         print("Fiducial range: ", r_range)
                         logging.info('Fiducial target object height and range: {a}, {b}'.format (a=obj_hgt, b=r_range))
 
@@ -190,7 +190,7 @@ while l==0:
         dx = dx*pxmm
         print('\n', 'dx in mm: ', dx)
         theta = math.asin(dx/tag0_r)
-        degOset = math.degrees(theta)
+        degOset = round(math.degrees(theta),1)
         print('\n ', "dx: ", dx, ' degOffset: ', degOset)
         targets[k][10] = degOset
         
