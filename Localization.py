@@ -260,6 +260,17 @@ while True:
                 print('\n', 'i= ', i, '  tag id= ', targets[i][0], '  ratio_i= ', ratio_i)
                 rr_list.append(r_of_r)
                 print('\n', 'rr_list: ', rr_list)
+            # find minimum ratio of ratio, meaning the robot is closest in azimuth to
+            # that fiducial target
+            minpos = rr_list.index(min(rr_list))
+            print('\n', 'minpos: ', minpos, '  r of r: ', rr_list[minpos])
+            
+            deg = targets[minpos][10]
+            rad = math.radians(deg)
+            robx = 2000 + (r_range * math.sin(rad)) # x in mm in arena coords
+            roby = r_range * math.cos(rad) # y in mm in arena coords
+            print('\n', 'deg, rad, robx, roby: ', deg,'  ', rad,'  ', robx,'  ', roby)
+            
 """
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
    Calculate Robot(s) Position
