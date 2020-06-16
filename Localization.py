@@ -156,7 +156,7 @@ while l==0:
                 for k in range(len(targets)):
                     #print('\n', 'k= ', k, ' targets tag= ',targets[k][0],' detected tag= ',result[i].tag_id, ' xcpx= ', xcpx)
                     if int(targets[k][0]) == int(result[i].tag_id):
-                                                # if gndT tag id matches detected tag id, write px coord to the list                 
+                        # if gndT tag id matches detected tag id, write px coord to the list                 
                         targets[k][7] = int(xcpx)
                         targets[k][8] = int(ycpx)
                         r_hgt = float(targets[k][6])                       
@@ -180,12 +180,15 @@ while l==0:
             tag0_x = targets[i][7]
             print('\n', 'found fiducial tag 0; tag0_r: ', tag0_r)
     #calculate px/mm at the base target range 26.75 deg = .4669 rad
-    pxmm = 2 * tag0_r* math.sin(.4669)/1280
+    pxmm = (2 * tag0_r * math.sin(.4669))/1280
     print('\n', 'pxmm: ', pxmm)
     
     #scroll through fiducial targets and calculate degree offset
     for k in range(len(targets)):
         dx = int(targets[k][7]) - int(tag0_x)
+        print('\n', 'dx in px: ', dx)
+        dx = dx*pxmm
+        print('\n', 'dx in mm: ', dx)
         theta = math.asin(dx/tag0_r)
         degOset = math.degrees(theta)
         print('\n ', "dx: ", dx, ' degOffset: ', degOset)
