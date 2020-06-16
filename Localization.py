@@ -159,8 +159,7 @@ while l==0:
                                                 # if gndT tag id matches detected tag id, write px coord to the list                 
                         targets[k][7] = int(xcpx)
                         targets[k][8] = int(ycpx)
-                        r_hgt = float(targets[k][6])
-                        
+                        r_hgt = float(targets[k][6])                       
                         r_range = calc_range(obj_hgt, r_hgt)
                         targets[k][9] = float(r_range)
                         print("Fiducial range: ", r_range)
@@ -171,9 +170,28 @@ while l==0:
                 
                 # call def to estimate robot azimuth angle (def calc_az_angle)
                 # call def to calculate robot x,y location in arena coordinates (def calc_rposn)
-            else:
-                pass
-
+            
+    #find fiducial tag 0 and extract range and x-coord
+    for i in range(len(targets)):
+        print('\n','looking for fiducial 0', 'i= ',i, ' targets[i][0]= ', targets[i][0])
+        if int(targets[i][0]) == 0:
+            
+            tag0_r = targets[i][9]
+            tag0_x = targets[i][7]
+            print('\n', 'found fiducial tag 0; tag0_r: ', tag0_r)
+    #calculate px/mm at the base target range 26.75 deg = .4669 rad
+    pxmm = 2 * tag0_r* math.sin(.4669)/1280
+    print('\n', 'pxmm: ', pxmm)
+    
+    #scroll through fiducial targets and calculate degree offset
+    for k in range(len(targets)):
+        dx = int(targets[k][7]) - int(tag0_x)
+        theta = math.asin(dx/tag0_r)
+        degOset = math.degrees(theta)
+        print('\n ', "dx: ", dx, ' degOffset: ', degOset)
+        targets[k][10] = degOset
+        
+    logging.info('Fiducial targets list: {a}'.format (a=targets))       
     l = input("Press '0' for another image; '1' to continue: ")
     l = int(l)
 
