@@ -247,7 +247,7 @@ while True:
             # call def to calculate range to robot (def calc_range)
             r_range = calc_range(obj_hgt, 51)
             print("Robot range: ", r_range)
-            logging.info('Robot target object height and range: {a} | {b}'.format (a=obj_hgt, b=r_range))
+            logging.info('Robot target object height and range: {a}, {b}'.format (a=obj_hgt, b=r_range))
             ratio_r = (xcpx - 640)/r_range
             print('\n', 'robot ratio: ', ratio_r)
             rr_list = []
@@ -260,57 +260,22 @@ while True:
                 print('\n', 'i= ', i, '  tag id= ', targets[i][0], '  ratio_i= ', ratio_i)
                 rr_list.append(r_of_r)
                 print('\n', 'rr_list: ', rr_list)
+                logging.info('rr_list: {a}'.format (a=rr_list))
             # find minimum ratio of ratio, meaning the robot is closest in azimuth to
             # that fiducial target
             minpos = rr_list.index(min(rr_list))
             print('\n', 'minpos: ', minpos, '  r of r: ', rr_list[minpos])
-            
+            # calculate robot x,y in arena coords
             deg = targets[minpos][10]
-            rad = math.radians(deg)
-            robx = 2000 + (r_range * math.sin(rad)) # x in mm in arena coords
-            roby = r_range * math.cos(rad) # y in mm in arena coords
+            rad = round(math.radians(deg),4)
+            robx = int(2000 + (r_range * math.sin(rad))) # x in mm in arena coords
+            roby = int(r_range * math.cos(rad)) # y in mm in arena coords
             print('\n', 'deg, rad, robx, roby: ', deg,'  ', rad,'  ', robx,'  ', roby)
-            
-"""
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-   Calculate Robot(s) Position
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-"""            
-            # calculate robot ratio of px offset to range
-            #ratio_r = (xcpx - 640)/r_range
-#             print('\n', 'robot ratio: ', ratio_r)
-#             rr_list = []
-            # cycle through fiducial targets to calculate ratio px offset to range,
-            # and 'ratio-of-ratio' for each to build r-of-r list
-#             for i in range(len(targets)):
-#                 ratio_i = (targets[i][7] - 640)/targets[i][3]
-#                 r_of_r = abs(1 - (ratio_i/ratio_r))
-#                 rr_list.append(r_of_r)
-#                 print('\n', 'rr_list: ', rr_list)
-
-
-#             # calculate robot ratio of px offset to range
-#             ratio_r = (xcpx - 640)/r_range
-#             print('\n', 'robot ratio: ', ratio_r)
-#             rr_list = []
-#             # cycle through fiducial targets to calculate ratio px offset to range,
-#             # and 'ratio-of-ratio' for each to build r-of-r list
-#             for i in range(len(targets)):
-#                 ratio_i = (targets[i][7] - 640)/targets[i][3]
-#                 r_of_r = abs(1 - (ratio_i/ratio_r))
-#                 rr_list.append(r_of_r)
-#                 print('\n', 'rr_list: ', rr_list)
-#              
-
-
+            logging.info('deg, rad, robx, roby: {a}, {b}, {c}, {d} '.format (a=deg,b=rad,c=robx,d=roby))           
 
 if xcpx <0:
         print ("No targets detected")
         logging.info('No targets detected')
-
-
-   
-    
 
 """
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
